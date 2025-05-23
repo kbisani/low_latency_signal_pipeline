@@ -97,3 +97,6 @@ __pycache__/
 # IDE settings
 .vscode/
 ```
+
+
+We already have a pre-trained model, but you can collect new data and retrain each time to see how it predicts based on the market. 
