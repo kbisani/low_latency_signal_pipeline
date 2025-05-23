@@ -1,54 +1,30 @@
-# Low-Latency Trading Signal Pipeline
+# ⚡ Low-Latency Crypto Signal Pipeline
 
-This project implements a real-time trading signal engine that simulates high-frequency trading (HFT) speed constraints. It integrates a C++ module for low-latency data parsing and a Python-based ML model to generate trading signals from live market data.
+A real-time crypto trading signal engine processing live Binance trades, built with a C++ feature extractor (via Pybind11) and Python-based ML models. Supports continuous learning, self-supervised labeling, and benchmarking of model performance.
 
-## 📁 Project Structure
-
-```
-low_latency_signal_pipeline/
-├── cpp/
-│   ├── feature_extractor.cpp      # C++ code for fast feature extraction
-│   └── CMakeLists.txt             # Build config with pybind11 submodule
-├── data/
-│   └── raw_data.jsonl             # Saved Binance WebSocket data (optional)
-├── models/
-│   └── signal_model.pkl           # Trained Python ML model
-├── python/
-│   ├── stream_handler.py          # WebSocket connection and data streamer
-│   ├── signal_generator.py        # ML signal generation logic
-│   ├── pipeline.py                # Main execution loop
-│   └── feature_extractor.py       # Placeholder for Python fallback
-├── tests/
-│   └── benchmark_latency.py       # Measure latency and performance
-├── .gitignore                     # Ignore virtual env and other artifacts
-├── README.md
-└── requirements.txt               # Python dependencies
-```
-
-## 🚀 Features
-- Real-time order book streaming from Binance via WebSocket API
-- C++ module (with pybind11) for fast feature extraction
-- Python ML model (Logistic Regression/XGBoost) for generating trading signals
-- Performance benchmarking: latency, throughput, signal accuracy
+## 🧠 Features
+- Streams 2,000+ Binance trades/min via WebSocket
+- C++ (Pybind11) module for fast feature computation
+- 13+ engineered features (e.g., momentum, skewness, imbalance)
+- XGBoost + Random Forest classification models
+- Real-time self-labeling and prediction logging
+- Benchmarking tools: rolling accuracy, confusion matrix, and classification report
 
 ## ⚙️ Setup Instructions
-1. Clone the repo and navigate to the directory:
-```bash
-git clone https://github.com/your-username/low_latency_signal_pipeline.git
-cd low_latency_signal_pipeline
-```
 
-2. Initialize submodules (for pybind11):
+1. **Clone repo and install submodules**  
 ```bash
+git clone https://github.com/yourusername/low_latency_signal_pipeline.git
+cd low_latency_signal_pipeline
 git submodule update --init --recursive
 ```
 
-3. Install Python dependencies:
+2. **Install Python packages**  
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Build the C++ extension:
+3. **Build the C++ feature extractor**
 ```bash
 cd cpp
 mkdir build && cd build
@@ -56,47 +32,47 @@ cmake ..
 make
 ```
 
-5. Run the main pipeline:
+4. **Run the live stream handler**  
 ```bash
-python python/pipeline.py
+python python/stream_handler.py
 ```
 
-## 📊 TODO
-- [x] Build WebSocket streamer
-- [ ] Implement C++ feature extractor
-- [ ] Train signal model and serialize it
-- [ ] Integrate C++ + Python pipeline
-- [ ] Add latency benchmarking
-
-## 📜 License
-MIT
-
----
-
-## 📦 requirements.txt
-```
-websockets==11.0.3
-pandas==2.2.2
-numpy==1.26.4
-scikit-learn==1.4.2
-xgboost==2.0.3
-pybind11==2.12.0
+5. **Benchmark model accuracy (optional)**  
+```bash
+python python/benchmark_accuracy.py
 ```
 
-## 📁 .gitignore
-```
-# Ignore virtual environments
-llsh/
-.venv/
-venv/
+## 🧪 Model Training & Testing
 
-# Python cache files
-__pycache__/
-*.py[cod]
-
-# IDE settings
-.vscode/
+- Train a dummy model:  
+```bash
+python python/train_signal_model.py
 ```
 
+- Retrain using collected labeled data:  
+```bash
+python python/retrain_from_log.py
+```
 
-We already have a pre-trained model, but you can collect new data and retrain each time to see how it predicts based on the market. 
+## 📈 Sample Results
+
+- ✅ Live benchmark accuracy: ~41%
+- 🔍 Features include: `price_momentum`, `volume_per_second`, `order_flow_imbalance`, `price_skewness`, etc.
+- 🧠 Transformer & reinforcement learning models under exploration for adaptive trading
+
+## 📄 Requirements
+```
+websockets==11.0.3  
+pandas==2.2.2  
+numpy==1.26.4  
+scikit-learn==1.4.2  
+xgboost==2.0.3  
+pybind11==2.12.0  
+matplotlib==3.8.4  
+```
+
+## 🛡️ License
+
+MIT License
+
+Inspired by real-time HFT systems, this project combines market data engineering with low-latency ML signal generation for continuous experimentation.
