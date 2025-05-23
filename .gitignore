@@ -31,6 +31,7 @@ cmake_install.cmake
 
 # Pybind-generated shared objects
 *.cpython-*.so
-
-
 *.jsonl
+labeled_data.jsonl
+labeled_data_with_preds.jsonl
+models/*.pkl
