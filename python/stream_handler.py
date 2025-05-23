@@ -9,6 +9,9 @@ import sys
 sys.path.append("cpp/build")
 from feature_extractor_cpp import Trade, compute_features
 
+# Add signal generator
+from signal_generator import generate_signal
+
 # Binance WebSocket
 BINANCE_WS_URL = "wss://stream.binance.com:9443/ws/btcusdt@trade"
 WINDOW_SIZE = 30
@@ -34,10 +37,22 @@ async def stream_trades():
                 trade_obj = Trade(price, quantity, side, trade['T'])
                 trade_window.append(trade_obj)
 
-                # Compute features once window is full
+                # Compute features + predict signal
                 if len(trade_window) >= 2:
                     features = compute_features(list(trade_window))
-                    print(f"📊 Features (C++): {features}")
+                    print(f"📊 Features: {features}")
+
+                    signal = generate_signal(features)
+                    if signal == 1:
+                        print("🟢 Signal: BUY")
+                    elif signal == -1:
+                        print("🔴 Signal: SELL")
+                    else:
+                        print("⚪ Signal: HOLD")
+                    print()
+
+                else:
+                    print("⏳ Waiting for more trades...")
 
             except Exception as e:
                 print(f"[{datetime.now()}] ❌ Error: {e}")
