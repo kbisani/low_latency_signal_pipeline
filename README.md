@@ -18,6 +18,7 @@ low_latency_signal_pipeline/
 │   └── pipeline.py                # Main execution loop
 ├── tests/
 │   └── benchmark_latency.py       # Measure latency and performance
+├── .gitignore                     # Ignore virtual env and other artifacts
 ├── README.md
 └── requirements.txt               # Python dependencies
 ```
@@ -54,11 +55,38 @@ python python/pipeline.py
 ```
 
 ## 📊 TODO
+- [x] Build WebSocket streamer
 - [ ] Implement C++ feature extractor
-- [ ] Build WebSocket streamer
 - [ ] Train signal model and serialize it
 - [ ] Integrate C++ + Python pipeline
 - [ ] Add latency benchmarking
 
 ## 📜 License
 MIT
+
+---
+
+## 📦 requirements.txt
+```
+websockets==11.0.3
+pandas==2.2.2
+numpy==1.26.4
+scikit-learn==1.4.2
+xgboost==2.0.3
+pybind11==2.12.0
+```
+
+## 📁 .gitignore
+```
+# Ignore virtual environments
+llsh/
+.venv/
+venv/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# IDE settings
+.vscode/
+```
