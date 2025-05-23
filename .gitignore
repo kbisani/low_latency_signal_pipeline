@@ -31,3 +31,6 @@ cmake_install.cmake
 
 # Pybind-generated shared objects
 *.cpython-*.so
+
+
+*.jsonl
