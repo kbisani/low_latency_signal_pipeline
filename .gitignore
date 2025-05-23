@@ -1,6 +1,33 @@
+# Python virtual environments
 llsh/
 .venv/
 venv/
+
+# Python bytecode
 __pycache__/
 *.py[cod]
+
+# VS Code settings
 .vscode/
+
+# Jupyter Notebook checkpoints (if you ever use .ipynb)
+.ipynb_checkpoints/
+
+# macOS metadata
+.DS_Store
+
+# C++ build artifacts
+cpp/build/
+*.so
+*.o
+*.obj
+*.a
+*.dll
+*.exe
+CMakeFiles/
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+
+# Pybind-generated shared objects
+*.cpython-*.so

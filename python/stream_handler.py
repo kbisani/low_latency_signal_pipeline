@@ -2,12 +2,17 @@ import asyncio
 import websockets
 import json
 from datetime import datetime
-from feature_extractor import FeatureExtractor
+from collections import deque
+import sys
 
-extractor = FeatureExtractor(window_size=30)
+# Add path to C++ module
+sys.path.append("cpp/build")
+from feature_extractor_cpp import Trade, compute_features
 
-# Binance trade stream for BTC/USDT
+# Binance WebSocket
 BINANCE_WS_URL = "wss://stream.binance.com:9443/ws/btcusdt@trade"
+WINDOW_SIZE = 30
+trade_window = deque(maxlen=WINDOW_SIZE)
 
 async def stream_trades():
     async with websockets.connect(BINANCE_WS_URL) as websocket:
@@ -19,23 +24,20 @@ async def stream_trades():
                 trade = json.loads(message)
 
                 trade_time = datetime.fromtimestamp(trade['T'] / 1000)
-                price = trade['p']
-                quantity = trade['q']
+                price = float(trade['p'])
+                quantity = float(trade['q'])
                 side = "BUY" if trade['m'] is False else "SELL"
 
                 print(f"[{trade_time}] {side}: {quantity} BTC @ ${price}")
 
-                trade_obj = {
-                    "price": price,
-                    "quantity": quantity,
-                    "side": side,
-                    "timestamp": trade['T']
-                }
-                extractor.update(trade_obj)
-                
-                features = extractor.compute_features()
-                if features:
-                    print(f"📊 Features: {features}")
+                # Add new trade to window
+                trade_obj = Trade(price, quantity, side, trade['T'])
+                trade_window.append(trade_obj)
+
+                # Compute features once window is full
+                if len(trade_window) >= 2:
+                    features = compute_features(list(trade_window))
+                    print(f"📊 Features (C++): {features}")
 
             except Exception as e:
                 print(f"[{datetime.now()}] ❌ Error: {e}")

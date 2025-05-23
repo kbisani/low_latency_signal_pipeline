@@ -7,7 +7,8 @@ This project implements a real-time trading signal engine that simulates high-fr
 ```
 low_latency_signal_pipeline/
 ├── cpp/
-│   └── feature_extractor.cpp      # C++ code for fast feature extraction
+│   ├── feature_extractor.cpp      # C++ code for fast feature extraction
+│   └── CMakeLists.txt             # Build config with pybind11 submodule
 ├── data/
 │   └── raw_data.jsonl             # Saved Binance WebSocket data (optional)
 ├── models/
@@ -15,7 +16,8 @@ low_latency_signal_pipeline/
 ├── python/
 │   ├── stream_handler.py          # WebSocket connection and data streamer
 │   ├── signal_generator.py        # ML signal generation logic
-│   └── pipeline.py                # Main execution loop
+│   ├── pipeline.py                # Main execution loop
+│   └── feature_extractor.py       # Placeholder for Python fallback
 ├── tests/
 │   └── benchmark_latency.py       # Measure latency and performance
 ├── .gitignore                     # Ignore virtual env and other artifacts
@@ -36,12 +38,17 @@ git clone https://github.com/your-username/low_latency_signal_pipeline.git
 cd low_latency_signal_pipeline
 ```
 
-2. Install Python dependencies:
+2. Initialize submodules (for pybind11):
+```bash
+git submodule update --init --recursive
+```
+
+3. Install Python dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Build the C++ extension:
+4. Build the C++ extension:
 ```bash
 cd cpp
 mkdir build && cd build
@@ -49,7 +56,7 @@ cmake ..
 make
 ```
 
-4. Run the main pipeline:
+5. Run the main pipeline:
 ```bash
 python python/pipeline.py
 ```
