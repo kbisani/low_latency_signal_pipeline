@@ -4,8 +4,9 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 import joblib
+import os
 
-# Simulate training data (you can replace with real historical features later)
+# Simulate training data (you can replace with real labeled_data.jsonl later)
 def generate_dummy_data(n=1000):
     np.random.seed(42)
     data = pd.DataFrame({
@@ -13,12 +14,13 @@ def generate_dummy_data(n=1000):
         "price_std": np.random.uniform(1, 10, n),
         "buy_sell_ratio": np.random.uniform(0.5, 2.0, n),
         "trades_per_second": np.random.uniform(1.0, 3.0, n),
+        "price_momentum": np.random.uniform(-0.005, 0.005, n),  # new!
     })
 
-    # Create dummy signals: 1 (buy), 0 (hold), -1 (sell)
+    # Dummy signal rule based on price_momentum and buy_sell_ratio
     conditions = [
-        data.buy_sell_ratio > 1.5,
-        data.buy_sell_ratio < 0.8,
+        (data.buy_sell_ratio > 1.5) & (data.price_momentum > 0.001),
+        (data.buy_sell_ratio < 0.8) & (data.price_momentum < -0.001),
     ]
     choices = [1, -1]
     data["signal"] = np.select(conditions, choices, default=0)
@@ -41,5 +43,6 @@ print("\n📊 Classification Report:")
 print(classification_report(y_test, y_pred))
 
 # Save model
+os.makedirs("models", exist_ok=True)
 joblib.dump(model, "models/signal_model.pkl")
 print("✅ Model saved to models/signal_model.pkl")

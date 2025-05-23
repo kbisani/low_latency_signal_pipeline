@@ -27,7 +27,7 @@ std::map<std::string, double> compute_features(const std::vector<Trade>& trades)
         else if (trade.side == "SELL") sell_volumes.push_back(trade.quantity);
     }
 
-    double mean_price = 0.0, std_dev = 0.0, buy_total = 0.0, sell_total = 0.0;
+    double mean_price = 0.0, std_dev = 0.0, buy_total = 0.0, sell_total = 0.0, momentum = 0.0;
     if (!prices.empty()) {
         double sum = std::accumulate(prices.begin(), prices.end(), 0.0);
         mean_price = sum / prices.size();
@@ -37,6 +37,10 @@ std::map<std::string, double> compute_features(const std::vector<Trade>& trades)
                                 return acc + (val - mean_price) * (val - mean_price);
                             });
         std_dev = std::sqrt(sq_sum / prices.size());
+
+        if (prices.size() >= 2 && prices.front() != 0.0) {
+            momentum = (prices.back() - prices.front()) / prices.front();
+        }
     }
 
     buy_total = std::accumulate(buy_volumes.begin(), buy_volumes.end(), 0.0);
@@ -48,7 +52,8 @@ std::map<std::string, double> compute_features(const std::vector<Trade>& trades)
         {"mean_price", mean_price},
         {"price_std", std_dev},
         {"buy_sell_ratio", buy_total / (sell_total + 1e-6)},
-        {"trades_per_second", trades.size() / (time_span + 1e-6)}
+        {"trades_per_second", trades.size() / (time_span + 1e-6)},
+        {"price_momentum", momentum}
     };
 }
 
