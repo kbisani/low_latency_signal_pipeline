@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 import joblib
 
-LOG_PATH = "labeled_data.jsonl"
+LOG_PATH = "labeled_data_with_preds.jsonl"
 MODEL_PATH = "models/signal_model.pkl"
 
 # Load log file

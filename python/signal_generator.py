@@ -8,14 +8,14 @@ FEATURE_ORDER = [
     "price_zscore", "volume_per_second", "order_flow_imbalance"
 ]
 
-# Load the Random Forest model once (on module import)
+# Load model once at import time
 model = joblib.load("models/signal_model.pkl")
 
-# Remap RandomForest prediction class -> original label
-inverse_label_map = {0: -1, 1: 0, 2: 1}
+# Prediction wrapper
+def generate_signal(features):
+    df = pd.DataFrame([features], columns=FEATURE_ORDER)
+    raw_pred = model.predict(df)[0]
 
-def generate_signal(features: dict) -> int:
-    """ Given a feature dict, predict the trading signal. """
-    x = np.array([[features[f] for f in FEATURE_ORDER]])
-    raw_pred = model.predict(x)[0]
+    # Map back to original labels
+    inverse_label_map = {0: -1, 1: 0, 2: 1}
     return inverse_label_map[int(raw_pred)]
