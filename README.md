@@ -56,7 +56,7 @@ python python/retrain_from_log.py
 
 ## 📈 Sample Results
 
-- ✅ Live benchmark accuracy: ~41%
+- ✅ Live benchmark accuracy: ~73%
 - 🔍 Features include: `price_momentum`, `volume_per_second`, `order_flow_imbalance`, `price_skewness`, etc.
 - 🧠 Transformer & reinforcement learning models under exploration for adaptive trading
 
